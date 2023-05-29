@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Piece : MonoBehaviour
@@ -38,6 +36,7 @@ public class Piece : MonoBehaviour
         stepTime = Time.time + stepDelay;
         moveTime = Time.time + moveDelay;
         lockTime = 0f;
+
 
         if (cells == null)
         {
@@ -79,7 +78,7 @@ public class Piece : MonoBehaviour
                 if (Input.GetKey(KeyCode.DownArrow))
                     Move(Vector2Int.down);
             }
-            
+
             if (Time.time >= stepTime)
                 Step();
         }
@@ -100,7 +99,10 @@ public class Piece : MonoBehaviour
     {
         board.SetPiece(this);
         int linesCleared = board.ClearLines();
+
+        // Decreases step delay as more lines are cleared
         stepDelay = linesCleared > 0 ? stepDelay - linesCleared * 0.01f : stepDelay;
+
         board.SpawnPiece();
     }
 
@@ -113,6 +115,8 @@ public class Piece : MonoBehaviour
         if (board.IsValidPosition(this, newPosition))
         {
             position = newPosition;
+            
+            // Reset movement & lock timer when piece is set
             moveTime = Time.time + moveDelay;
             lockTime = 0f;
             return true;
@@ -188,18 +192,4 @@ public class Piece : MonoBehaviour
         else
             return min + (input - min) % (max - min);
     }
-
-    #region Drag Drop methods
-    private void OnMouseOver()
-    {
-        if (isDraggable && Input.GetMouseButtonDown(0))
-        {
-            isDragged = true;
-        }
-    }
-    private void OnMouseUp()
-    {
-        isDragged = false;
-    }
-    #endregion
 }

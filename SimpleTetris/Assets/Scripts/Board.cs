@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -8,6 +9,8 @@ public class Board : MonoBehaviour
     public TetrominoData[] tetrominos;
     public Vector3Int spawnPosition;
     public Vector2Int boardSize = new Vector2Int(10, 20);
+    public TextMeshProUGUI scoreText;
+    private int currScore = 0;
 
     public RectInt Bounds
     {
@@ -31,6 +34,8 @@ public class Board : MonoBehaviour
         {
             tetrominos[i].Initialize();
         }
+
+        scoreText.text = "Current Score: " + currScore.ToString();
     }
 
     private void Start()
@@ -54,6 +59,8 @@ public class Board : MonoBehaviour
     private void GameOver()
     {
         this.tileMap.ClearAllTiles();
+        currScore = 0;
+        scoreText.text = "Current Score: " + currScore.ToString();
         print("GAMEOVER!!!");
     }
 
@@ -98,6 +105,7 @@ public class Board : MonoBehaviour
         int row = bounds.yMin;
         int linesCleared = 0;
 
+        // Bound check
         while (row < bounds.yMax)
         {
             if (IsLineFull(row))
@@ -108,6 +116,11 @@ public class Board : MonoBehaviour
             else
                 row++;
         }
+
+        // Score calculation & Update
+        currScore += (linesCleared * 100);
+        scoreText.text = "Current Score: " + currScore.ToString();
+
         return linesCleared;
     }
 
