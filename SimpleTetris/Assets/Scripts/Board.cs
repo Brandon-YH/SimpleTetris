@@ -29,6 +29,7 @@ public class Board : MonoBehaviour
 
         tileMap = GetComponentInChildren<Tilemap>();
         activePiece = GetComponentInChildren<Piece>();
+        activePiece.audioManager = FindObjectOfType<AudioManager>();
 
         for (int i = 0; i < tetrominos.Length; i++)
         {

@@ -538,10 +538,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
-  - name: 
-    clip: {fileID: 0}
-    volume: 0
-    pitch: 0.1
+  - name: MainTheme
+    clip: {fileID: 8300000, guid: ed0c6c67a600d454baf63a6c7da29da0, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Click
+    clip: {fileID: 8300000, guid: bc142e62ea1767b46b27166c152958ac, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Blip
+    clip: {fileID: 8300000, guid: ffc5d13416c6df847a5a25bc1d09b7c6, type: 3}
+    volume: 0.1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Bril
+    clip: {fileID: 8300000, guid: f0fb4863f6bc24c45b22a4cf664897d5, type: 3}
+    volume: 0.2
+    pitch: 1
+    loop: 0
     source: {fileID: 0}
 --- !u!4 &598721306
 Transform:
@@ -1135,5 +1154,5 @@ MonoBehaviour:
   stepDelay: 1
   moveDelay: 0.1
   lockDelay: 0.5
-  IsTetris: 1
+  audioManager: {fileID: 0}
   isDraggable: 0

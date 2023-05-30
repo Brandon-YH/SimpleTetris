@@ -12,6 +12,7 @@ public class Sound
     public float volume;
     [Range(0.1f, 3f)]
     public float pitch;
+    public bool loop;
 
     // Hides from Unity Inspection
     [HideInInspector]

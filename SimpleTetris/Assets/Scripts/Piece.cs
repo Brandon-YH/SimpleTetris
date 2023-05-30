@@ -17,7 +17,8 @@ public class Piece : MonoBehaviour
     private float moveTime;
     private float lockTime;
 
-    public bool IsTetris;
+    [HideInInspector]
+    public AudioManager audioManager;
 
     #region Drag Drop Properties
     public bool isDraggable = true;
@@ -54,34 +55,38 @@ public class Piece : MonoBehaviour
         board.ClearPiece(this);
         lockTime += Time.deltaTime;
 
-        if (IsTetris)
+        if (Input.GetKeyDown(KeyCode.Z))
+            Rotate(-1);
+        else if ((Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.UpArrow)))
         {
-            if (Input.GetKeyDown(KeyCode.Z))
-                Rotate(-1);
-            else if ((Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.UpArrow)))
-                Rotate(1);
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                while (Move(Vector2Int.down))
-                    continue;
-                Lock();
-            }
-
-            if (Time.time > moveTime)
-            {
-                if (Input.GetKey(KeyCode.LeftArrow))
-                    Move(Vector2Int.left);
-                else if (Input.GetKey(KeyCode.RightArrow))
-                    Move(Vector2Int.right);
-
-                if (Input.GetKey(KeyCode.DownArrow))
-                    Move(Vector2Int.down);
-            }
-
-            if (Time.time >= stepTime)
-                Step();
+            Rotate(1);
+            audioManager.Play("Click");
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            while (Move(Vector2Int.down))
+                continue;
+            Lock();
+        }
+
+        if (Time.time > moveTime)
+        {
+            // Audio Moving
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.DownArrow))
+                audioManager.Play("Click");
+
+            if (Input.GetKey(KeyCode.LeftArrow))
+                Move(Vector2Int.left);
+            else if (Input.GetKey(KeyCode.RightArrow))
+                Move(Vector2Int.right);
+
+            if (Input.GetKey(KeyCode.DownArrow))
+                Move(Vector2Int.down);
+        }
+
+        if (Time.time >= stepTime)
+            Step();
 
         board.SetPiece(this);
     }
@@ -103,6 +108,12 @@ public class Piece : MonoBehaviour
         // Decreases step delay as more lines are cleared
         stepDelay = linesCleared > 0 ? stepDelay - linesCleared * 0.01f : stepDelay;
 
+        audioManager.Play("Click");
+        audioManager.Play("Blip");
+
+        if (linesCleared > 0)
+            audioManager.Play("Bril");
+
         board.SpawnPiece();
     }
 
@@ -115,7 +126,7 @@ public class Piece : MonoBehaviour
         if (board.IsValidPosition(this, newPosition))
         {
             position = newPosition;
-            
+
             // Reset movement & lock timer when piece is set
             moveTime = Time.time + moveDelay;
             lockTime = 0f;
