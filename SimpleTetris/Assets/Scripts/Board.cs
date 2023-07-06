@@ -36,7 +36,7 @@ public class Board : MonoBehaviour
             tetrominos[i].Initialize();
         }
 
-        scoreText.text = "Current Score: " + currScore.ToString();
+        scoreText.text = "Score: " + currScore.ToString();
     }
 
     private void Start()
@@ -61,7 +61,7 @@ public class Board : MonoBehaviour
     {
         this.tileMap.ClearAllTiles();
         currScore = 0;
-        scoreText.text = "Current Score: " + currScore.ToString();
+        scoreText.text = "Score: " + currScore.ToString();
         print("GAMEOVER!!!");
     }
 
@@ -120,7 +120,7 @@ public class Board : MonoBehaviour
 
         // Score calculation & Update
         currScore += (linesCleared * 100);
-        scoreText.text = "Current Score: " + currScore.ToString();
+        scoreText.text = "Score: " + currScore.ToString();
 
         return linesCleared;
     }

@@ -5,14 +5,16 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
-    public Sound[] sounds;
     public static AudioManager instance;
+    public AudioSource musicSource;
+    public AudioSource sfxSource;
+    public Sound[] sounds;
 
     void Awake()
     {
         // Checks for audio instance to prevent duplicate sound tracks
         if (instance == null)
-            instance= this;
+            instance = this;
         else
         {
             Destroy(gameObject);
@@ -24,11 +26,10 @@ public class AudioManager : MonoBehaviour
 
         foreach (var s in sounds)
         {
-            s.source = gameObject.AddComponent<AudioSource>();
-            s.source.clip = s.clip;
-            s.source.volume = s.volume;
-            s.source.pitch = s.pitch;
-            s.source.loop = s.loop;
+            if (s.name == "MainTheme")
+                s.source = musicSource;
+            else
+                s.source = sfxSource;
         }
     }
 
@@ -44,6 +45,12 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning("**WARNING** Sound file not found: " + name);
             return;
         }
+
+        s.source.clip = s.clip;
+        s.source.volume = s.volume;
+        s.source.pitch = s.pitch;
+        s.source.loop = s.loop;
+
         s.source.Play();
     }
 }
