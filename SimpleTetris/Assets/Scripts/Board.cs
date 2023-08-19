@@ -1,5 +1,8 @@
+using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class Board : MonoBehaviour
@@ -59,10 +62,39 @@ public class Board : MonoBehaviour
 
     private void GameOver()
     {
-        this.tileMap.ClearAllTiles();
-        currScore = 0;
-        scoreText.text = "Score: " + currScore.ToString();
-        print("GAMEOVER!!!");
+        var status = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex - 1);
+
+        // Async function to wait for scene to load
+        status.completed += (x) =>
+        {
+            Scene loadedScene = SceneManager.GetSceneByName("Menu");
+            GameObject canvasObj = loadedScene.GetRootGameObjects().FirstOrDefault(x => x.name == "Canvas");
+
+            Transform canvasTransform = canvasObj.transform;
+
+            for (int i = 0; i < canvasTransform.childCount; i++)
+            {
+                var child = canvasTransform.GetChild(i);
+                Debug.Log(child.name);
+                if (child.name != "GameOver")
+                {
+                    child.gameObject.SetActive(false);
+                }
+                else
+                {
+                    child.gameObject.SetActive(true);
+                    TextMeshProUGUI scoreText = child.gameObject.transform.Find("ScoreText").GetComponent<TextMeshProUGUI>();
+                    scoreText.text = "SCORE: " + currScore.ToString();
+                }
+            }
+        };
+        
+        //Transform canvas = GameObject.Find("Canvas").transform;
+
+        //for (int i = 0; i < canvas.childCount; i++)
+        //{
+        //    Debug.Log("NAME: " + canvas.GetChild(i).name);
+        //}
     }
 
     public void SetPiece(Piece piece)
